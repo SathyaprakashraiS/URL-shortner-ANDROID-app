@@ -1,10 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import * as Clipboard from 'expo-clipboard';
 
 export default function App() {
   const [link, onChangelink] = useState(null);
   const [number, onChangeNumber] = useState(" ");
+
+  const [copiedText, setCopiedText] = React.useState('');
+
 
   const [book,setbook] = useState([]);
   var apilink=[];
@@ -75,6 +79,7 @@ export default function App() {
         console.log(apiavail)
         console.log(apilink.length)
         onChangeNumber(apilink[0].themurl)
+        Clipboard.setString(apilink[0].themurl);
         Alert.alert(apilink[0].themurl)
       })
       .catch((error) => {
@@ -83,6 +88,11 @@ export default function App() {
       });
     }
     console.log("APIAVAIL: ",apiavail)
+
+    const fetchCopiedText = async () => {
+      const text = await Clipboard.getStringAsync();
+      setCopiedText(text);
+    };
 
   return (
     // <SafeAreaView>
@@ -122,6 +132,8 @@ export default function App() {
       } */}
       
       <Text>{number}</Text>
+      <Button title="View copied text" onPress={fetchCopiedText} />
+      <Text style={styles.copiedText}>{copiedText}</Text>
 
       <StatusBar style="auto" />
     </View>
@@ -144,3 +156,42 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+
+
+// import * as React from 'react';
+// import { View, Text, Button, StyleSheet } from 'react-native';
+// import * as Clipboard from 'expo-clipboard';
+
+// export default function App() {
+//   const [copiedText, setCopiedText] = React.useState('');
+
+//   const copyToClipboard = () => {
+//     Clipboard.setString('hahaha');
+//   };
+
+//   const fetchCopiedText = async () => {
+//     const text = await Clipboard.getStringAsync();
+//     setCopiedText(text);
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <Button title="Click here to copy to Clipboard" onPress={copyToClipboard} />
+//       <Button title="View copied text" onPress={fetchCopiedText} />
+//       <Text style={styles.copiedText}>{copiedText}</Text>
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   copiedText: {
+//     marginTop: 10,
+//     color: 'red',
+//   },
+// });
