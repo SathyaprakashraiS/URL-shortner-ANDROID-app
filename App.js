@@ -3,20 +3,22 @@ import React, {useState, useEffect} from 'react';
 import { FlatList, SafeAreaView, StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 
 export default function App() {
-  const [link, onChangelink] = React.useState(null);
-  const [number, onChangeNumber] = React.useState(null);
+  const [link, onChangelink] = useState(null);
+  const [number, onChangeNumber] = useState(" ");
 
   const [book,setbook] = useState([]);
-  var apiavail=false;
-  async function fetchBook(stand) {
-    var apiavail=false;
-    var booklink='https://dope2meal.herokuapp.com/food-list/';
+  var apilink=[];
+  var apiavail="false";
+  async function fetchBook(sendlink) {
+    var apiavail="false";
+    var booklink='https://urlsho.herokuapp.com/url/shortner/'+sendlink;
+    console.log(booklink)
     const request = await fetch(booklink)
       .then(response => {
         if(response.ok)
       {
         console.log("here")
-        apiavail=true;
+        var apiavail="false";
         return response.json(); 
       }
       else{
@@ -38,12 +40,50 @@ export default function App() {
   //   }, []);
   console.log("API AVAIL",apiavail)
 
-    function theprint(topr){
+  async function theprint(topr) {
+    apiavail="false";
       console.log("recieved link: ",topr);
-      var result = link.replace("/", "---");
+      var result=topr
+      var i=0
+      for(i=0;i<10;i++){
+        result = result.replace("/", "---");
+      }
       console.log("transmitted link: ",result);
-      fetchBook();
+    var booklink='https://urlsho.herokuapp.com/url/shortner/'+result+'/';
+    console.log(booklink)
+    const request = await fetch(booklink)
+      .then(response => {
+        if(response.ok)
+      {
+        console.log("here")
+        apiavail="true";
+        return response.json(); 
+      }
+      else{
+        console.log("im not here")
+      }
+    })
+      .then(data => { 
+        console.log("the data is: ",data)
+        setbook(data)
+        console.log("here0")
+        //console.log(setbook)
+        apilink=data;
+        apiavail="true";
+        console.log(apilink)
+        console.log(apilink[0].themurl)
+        console.log(apiavail)
+        console.log(apilink.length)
+        onChangeNumber(apilink[0].themurl)
+        Alert.alert(apilink[0].themurl)
+      })
+      .catch((error) => {
+        console.log("here1")
+        console.log("the error ",error)
+      });
     }
+    console.log("APIAVAIL: ",apiavail)
+
   return (
     // <SafeAreaView>
     <View style={styles.container}>
@@ -74,12 +114,14 @@ export default function App() {
       />
       
       {/* {
-      book.map(item => (
+      book.map(item => {
         <View>
-          <Text>{item.name}</Text>
+          <Text>{apilink[0].themurl}</Text>
         </View>
-          ))
+})
       } */}
+      
+      <Text>{number}</Text>
 
       <StatusBar style="auto" />
     </View>
