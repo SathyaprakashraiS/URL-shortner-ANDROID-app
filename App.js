@@ -15,7 +15,7 @@ export default function App() {
   var apiavail="false";
   async function fetchBook(sendlink) {
     var apiavail="false";
-    var booklink='https://urlsho.herokuapp.com/url/shortner/'+sendlink;
+    var booklink='https://seedcell.herokuapp.com/url/shortner/'+sendlink;
     console.log(booklink)
     const request = await fetch(booklink)
       .then(response => {
@@ -53,7 +53,7 @@ export default function App() {
         result = result.replace("/", "---");
       }
       console.log("transmitted link: ",result);
-    var booklink='https://urlsho.herokuapp.com/url/shortner/'+result+'/';
+    var booklink='https://seedcell.herokuapp.com/url/shortner/'+result+'/';
     console.log(booklink)
     const request = await fetch(booklink)
       .then(response => {
@@ -94,10 +94,14 @@ export default function App() {
       setCopiedText(text);
     };
 
+    function numberzero()
+    {
+      onChangeNumber(" ");
+    }
   return (
     // <SafeAreaView>
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text style={styles.titleText}>Paste link to shorten!</Text>
       
       
       
@@ -117,11 +121,16 @@ export default function App() {
         keyboardType="numeric"
       /> */}
 
-      <Button
-        title="Press me"
+      {link? (<View><Button
+        title="Generate Link"
         color="#f194ff"
         onPress={() => theprint(link)}
-      />
+      /></View>):(<View></View>)}
+      {/* <Button
+        title="Generate Link"
+        color="#f194ff"
+        onPress={() => theprint(link)}
+      /> */}
       
       {/* {
       book.map(item => {
@@ -131,11 +140,24 @@ export default function App() {
 })
       } */}
       
-      <Text>{number}</Text>
-      <Button title="View copied text" onPress={fetchCopiedText} />
+      {/* <Text>{number}</Text> */}
+
+      {number !=" " && link ? (
+        <View>
+          <Text></Text>
+        <Button title="copy generated link" onPress={fetchCopiedText} />
+        {/* <Text style={styles.copiedText}>{copiedText}</Text> */}
+        <StatusBar style="auto" />
+        </View>
+      ):(
+        <View>
+          <Text> </Text>
+        </View>
+      )}
+      {/* <Button title="copy link" onPress={fetchCopiedText} />
       <Text style={styles.copiedText}>{copiedText}</Text>
 
-      <StatusBar style="auto" />
+      <StatusBar style="auto" /> */}
     </View>
     // </SafeAreaView>
   );
@@ -154,6 +176,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  titleText: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
 
