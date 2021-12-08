@@ -1,9 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import React, {useState, useEffect} from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { FlatList, StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import * as Clipboard from 'expo-clipboard';
+import 'react-native-gesture-handler';
+import { createStackNavigator} from '@react-navigation/stack';
 
 export default function App() {
+  const Stack = createStackNavigator();
+
   const [link, onChangelink] = useState(null);
   const [number, onChangeNumber] = useState(" ");
 
@@ -80,7 +85,8 @@ export default function App() {
         console.log(apilink.length)
         onChangeNumber(apilink[0].themurl)
         Clipboard.setString(apilink[0].themurl);
-        Alert.alert(apilink[0].themurl)
+        //Alert.alert(apilink[0].themurl)
+        Alert.alert("LINK GENERATED SUCCESSFULLY")
       })
       .catch((error) => {
         console.log("here1")
@@ -99,7 +105,11 @@ export default function App() {
       onChangeNumber(" ");
     }
   return (
-    // <SafeAreaView>
+    
+    <SafeAreaView >
+      <View style={styles.maingrid}>
+      <Text  style={{color: '#FFFFFF', fontSize: 20, fontWeight: 'bold', marginVertical:'2%', marginLeft:'3%',}}>URL SHORTNER</Text>
+      </View>
     <View style={styles.container}>
       <Text style={styles.titleText}>Paste link to shorten!</Text>
       
@@ -123,7 +133,7 @@ export default function App() {
 
       {link? (<View><Button
         title="Generate Link"
-        color="#f194ff"
+        color="#33FFF4"
         onPress={() => theprint(link)}
       /></View>):(<View></View>)}
       {/* <Button
@@ -140,12 +150,13 @@ export default function App() {
 })
       } */}
       
-      {/* <Text>{number}</Text> */}
+      {/* <Text>GENERATED LINK: {number}</Text> */}
 
       {number !=" " && link ? (
         <View>
           <Text></Text>
-        <Button title="copy generated link" onPress={fetchCopiedText} />
+          <Text>GENERATED LINK: {number}</Text>
+        <Button title="copy generated link" color="#33FFF4" onPress={fetchCopiedText} />
         {/* <Text style={styles.copiedText}>{copiedText}</Text> */}
         <StatusBar style="auto" />
         </View>
@@ -156,10 +167,12 @@ export default function App() {
       )}
       {/* <Button title="copy link" onPress={fetchCopiedText} />
       <Text style={styles.copiedText}>{copiedText}</Text>
-
+        
       <StatusBar style="auto" /> */}
-    </View>
-    // </SafeAreaView>
+      </View>
+      
+    </SafeAreaView>
+    
   );
 }
 
@@ -172,14 +185,41 @@ const styles = StyleSheet.create({
   },
 
   container: {
-    flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
+    marginVertical:'55%',
     justifyContent: 'center',
   },
   titleText: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  maingrid:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    // margin:'10%',
+    width:'100%',
+    height: 50,
+    padding:0,
+    backgroundColor: '#004CFF',
+    color:"#fff",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginVertical:'2%',
+    marginLeft:'3%',
+  },
+  copylink: {
+    fontWeight: 'bold',
+    backgroundColor: '#F0FF00',
+  },
+  genlink: {
+    fontWeight: 'bold',
+    backgroundColor: '#4EFF00',
+  },
+  page: {
+    flex: 1,
   },
 });
 
